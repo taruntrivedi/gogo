@@ -1,10 +1,3 @@
-
-# FELB2BNode
-
-FunEduLearn Coaching Tech
-
-  
-
 # FunEduLearn API v0.5
 
   
