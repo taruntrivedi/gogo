@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +67,14 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+=======
+# About this project:
+This is the dashboard project for the coachingtech product.
+
+# UI Related refrences:
+[Here](https://gogo-react.coloredstrategies.com/app/dashboards/default) is the demo for the template used
+
+# API Documentation:
+
+[Here](https://github.com/harshmandan/coachingtech-dashboard-react/blob/master/doc.md)
+>>>>>>> 59dd68fe961b8296ffe0904514ead27fad742bd9
