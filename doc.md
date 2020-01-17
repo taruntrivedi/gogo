@@ -467,13 +467,13 @@ Required parameter is:
 **NOTE:** This is a form-data request, not a JSON request.
 
 Required Parameters are:
-| | |
-|-------------|-------------------|
+
+| KEY | VALUE|
+| --- | --- |
 | file        | /sdcard/doc.pdf   |
 | description | Syllabus for 2020 |
 |    batch_id |  79as9f979as9fa9s |
 |        name |      Syllabus2020 |
-| | |
 
 
 ## Courses Routes
