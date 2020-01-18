@@ -1,0 +1,28 @@
+.register{
+    width: 80%;
+    margin: auto;
+    background-color: white;
+    height: 80vh;
+    
+}
+
+.account_type{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px auto;
+    width: 100%;
+}
+@media screen and (min-width: 480px) {
+    .account_type{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 50px auto;
+        width: 50%;
+    }
+}
+
+.send_otp_btn{
+    margin-bottom: 10px;
+}

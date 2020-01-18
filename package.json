@@ -6,7 +6,7 @@
   "dependencies": {
     "@glidejs/glide": "^3.3.0",
     "availity-reactstrap-validation": "^2.0.4",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "chart.js": "^2.7.2",
     "classnames": "2.2.6",
     "firebase": "^5.11.1",
@@ -50,7 +50,7 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "  react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

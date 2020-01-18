@@ -15,16 +15,16 @@ export const localeOptions = [
 
 
 
-// export const firebaseConfig = {
-//   apiKey: "AIzaSyBKS2Gop0fFO66TPC0Z5OHMwJTBXsiJ7zg",
-//   authDomain: "coachingtech-9f8ba.firebaseapp.com",
-//   databaseURL: "https://coachingtech-9f8ba.firebaseio.com",
-//   projectId: "coachingtech-9f8ba",
-//   storageBucket: "coachingtech-9f8ba.appspot.com",
-//   messagingSenderId: "18501623957",
-//   appId: "1:18501623957:web:376da22a8a23eed4d2bb9c",
-//   measurementId: "G-42M9VL9FKZ"
-// };
+export const firebaseConfig = {
+      apiKey: "AIzaSyBKS2Gop0fFO66TPC0Z5OHMwJTBXsiJ7zg",
+      authDomain: "coachingtech-9f8ba.firebaseapp.com",
+      databaseURL: "https://coachingtech-9f8ba.firebaseio.com",
+      projectId: "coachingtech-9f8ba",
+      storageBucket: "coachingtech-9f8ba.appspot.com",
+      messagingSenderId: "18501623957",
+      appId: "1:18501623957:web:376da22a8a23eed4d2bb9c",
+      measurementId: "G-42M9VL9FKZ"
+};
 
 export const searchPath = "/app/pages/search";
 export const servicePath = "https://api.coloredstrategies.com";

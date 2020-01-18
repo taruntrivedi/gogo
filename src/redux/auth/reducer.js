@@ -20,7 +20,8 @@ const INIT_STATE = {
     newPassword: '',
     resetPasswordCode: '',
     loading: false,
-    error: ''
+    error: '',
+    accountType:'',
 };
 
 export default (state = INIT_STATE, action) => {
