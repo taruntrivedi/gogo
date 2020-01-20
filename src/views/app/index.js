@@ -18,6 +18,9 @@ const Menu = React.lazy(() => import(/* webpackChunkName: "menu" */ './menu'));
 const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "blank-page" */ './blank-page')
 );
+const Actions = React.lazy(() =>
+  import(/* webpackChunkName: "blank-page" */ './actions')
+);
 
 class App extends Component {
   render() {
@@ -36,6 +39,10 @@ class App extends Component {
               <Route
                 path={`${match.url}/dashboards`}
                 render={props => <Dashboards {...props} />}
+              />
+              <Route
+                path={`${match.url}/actions`}
+                render={props => <Actions {...props} />}
               />
               <Route
                 path={`${match.url}/applications`}
