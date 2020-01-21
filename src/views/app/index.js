@@ -21,6 +21,12 @@ const BlankPage = React.lazy(() =>
 const Actions = React.lazy(() =>
   import(/* webpackChunkName: "blank-page" */ './actions')
 );
+const Attendance = React.lazy(() =>
+  import(/* webpackChunkName: "views-error" */ './dashboards/attendance')
+);
+const Announcement = React.lazy(() =>
+  import(/* webpackChunkName: "views-error" */ './dashboards/announcments')
+);
 
 class App extends Component {
   render() {
@@ -63,6 +69,14 @@ class App extends Component {
               <Route
                 path={`${match.url}/blank-page`}
                 render={props => <BlankPage {...props} />}
+              />
+                <Route
+                path={`${match.url}/attendance`}
+                render={props => <Attendance {...props} />}
+              />
+               <Route
+                path={`${match.url}/announcements`}
+                render={props => <Announcement {...props} />}
               />
               <Redirect to="/error" />
             </Switch>

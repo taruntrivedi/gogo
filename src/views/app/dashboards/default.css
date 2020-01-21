@@ -1,0 +1,14 @@
+.flex_props{
+    display: flex;
+    justify-content: space-between;
+}
+
+.card_time{
+    /* display: flex;
+    align-self: center; */
+    border: 2px solid #73236B;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    padding: 5px;
+    color:#73236B ;
+}

@@ -16,7 +16,7 @@ const data = [
     id: "pages",
     icon: "iconsminds-male-female",
     label: "Attendance",
-    to: "/app/pages",
+    to: "/app/attendance",
     
   },
   {
@@ -30,7 +30,7 @@ const data = [
     id: "ui",
     icon: "iconsminds-speaker",
     label: "Announcements",
-    to: "/app/ui",
+    to: "/app/announcements",
     
   },
   {

@@ -3,30 +3,29 @@ import moment from "moment";
 
 
 export const CalendarToolbar = toolbar => {
+  var label = moment() ;
+  
     const goToBack = () => {
-      toolbar.onNavigate("PREV");
+     label = moment().subtract(1, 'days').startOf('day');
+     
     };
     const goToNext = () => {
-      toolbar.onNavigate("NEXT");
+      label =moment().add(1, 'days').startOf('day');
     };
     const goToCurrent = () => {
       toolbar.onNavigate("TODAY");
     };
   
-    const label = () => {
-      const date = moment(toolbar.date);
-      return (
-        <span>
-          <span>{date.format("MMMM")} </span>
-          <span> {date.format("YYYY")}</span>
-        </span>
-      );
-    };
+
   
     return (
       <div className="big-calendar-header">
         <div className="float-left">
-          <label>{label()}</label>
+          <label><span>
+          <span>{label.format("DD")} </span>
+          <span>{label.format("MMMM")} </span>
+          <span> {label.format("YYYY")}</span>
+        </span></label>
         </div>
   
         <div className="float-right">
