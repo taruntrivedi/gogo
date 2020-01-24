@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { injectIntl } from "react-intl";
-
+import firebase from "firebase";
+import { Redirect } from "react-router-dom";
 import {
   UncontrolledDropdown,
   DropdownItem,
@@ -20,36 +21,23 @@ import {
   changeLocale
 } from "../../redux/actions";
 
-import {
-  menuHiddenBreakpoint,
-  searchPath,
-} from "../../constants/defaultValues";
+
 
 import { MobileMenuIcon, MenuIcon } from "../../components/svg";
 
 
-import { getDirection, setDirection } from "../../helpers/Utils";
 class TopNav extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isInFullScreen: false,
-      searchKeyword: ""
+      searchKeyword: "",
+      redirect:false
     };
   }
 
-  handleChangeLocale = (locale, direction) => {
-    this.props.changeLocale(locale);
 
-    const currentDirection = getDirection().direction;
-    if (direction !== currentDirection) {
-      setDirection(direction);
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
-    }
-  };
   isInFullScreen = () => {
     return (
       (document.fullscreenElement && document.fullscreenElement !== null) ||
@@ -60,84 +48,8 @@ class TopNav extends Component {
       (document.msFullscreenElement && document.msFullscreenElement !== null)
     );
   };
-  handleSearchIconClick = e => {
-    if (window.innerWidth < menuHiddenBreakpoint) {
-      let elem = e.target;
-      if (!e.target.classList.contains("search")) {
-        if (e.target.parentElement.classList.contains("search")) {
-          elem = e.target.parentElement;
-        } else if (
-          e.target.parentElement.parentElement.classList.contains("search")
-        ) {
-          elem = e.target.parentElement.parentElement;
-        }
-      }
 
-      if (elem.classList.contains("mobile-view")) {
-        this.search();
-        elem.classList.remove("mobile-view");
-        this.removeEventsSearch();
-      } else {
-        elem.classList.add("mobile-view");
-        this.addEventsSearch();
-      }
-    } else {
-      this.search();
-    }
-  };
-  addEventsSearch = () => {
-    document.addEventListener("click", this.handleDocumentClickSearch, true);
-  };
-  removeEventsSearch = () => {
-    document.removeEventListener("click", this.handleDocumentClickSearch, true);
-  };
-
-  handleDocumentClickSearch = e => {
-    let isSearchClick = false;
-    if (
-      e.target &&
-      e.target.classList &&
-      (e.target.classList.contains("navbar") ||
-        e.target.classList.contains("simple-icon-magnifier"))
-    ) {
-      isSearchClick = true;
-      if (e.target.classList.contains("simple-icon-magnifier")) {
-        this.search();
-      }
-    } else if (
-      e.target.parentElement &&
-      e.target.parentElement.classList &&
-      e.target.parentElement.classList.contains("search")
-    ) {
-      isSearchClick = true;
-    }
-
-    if (!isSearchClick) {
-      const input = document.querySelector(".mobile-view");
-      if (input && input.classList) input.classList.remove("mobile-view");
-      this.removeEventsSearch();
-      this.setState({
-        searchKeyword: ""
-      });
-    }
-  };
-  handleSearchInputChange = e => {
-    this.setState({
-      searchKeyword: e.target.value
-    });
-  };
-  handleSearchInputKeyPress = e => {
-    if (e.key === "Enter") {
-      this.search();
-    }
-  };
-
-  search = () => {
-    this.props.history.push(searchPath + "/" + this.state.searchKeyword);
-    this.setState({
-      searchKeyword: ""
-    });
-  };
+ 
 
   toggleFullScreen = () => {
     const isInFullScreen = this.isInFullScreen();
@@ -170,7 +82,13 @@ class TopNav extends Component {
   };
 
   handleLogout = () => {
-    this.props.logoutUser(this.props.history);
+    firebase.auth().signOut().then((response) => {
+      localStorage.clear("jwt");
+      localStorage.clear("userData");
+      this.setState({redirect:true});
+    }).catch(function(error) {
+      console.log(error)
+    });
   };
 
   menuButtonClick = (e, menuClickCount, containerClassnames) => {
@@ -193,6 +111,12 @@ class TopNav extends Component {
   };
 
   render() {
+    const user_name = localStorage.getItem("name");
+    const user_image = localStorage.getItem("image");
+    const navigate = this.state.redirect;
+    if(navigate){
+      return <Redirect to= "/user/register" push={true} />;
+    }
     const { containerClassnames, menuClickCount, locale } = this.props;
     const { messages } = this.props.intl;
     return (
@@ -242,18 +166,14 @@ class TopNav extends Component {
           <div className="user d-inline-block">
             <UncontrolledDropdown className="dropdown-menu-right">
               <DropdownToggle className="p-0" color="empty">
-                <span className="name mr-1">Sarah Kortney</span>
+              <span className="name mr-1">{user_name}</span>
                 <span>
-                  <img alt="Profile" src="/assets/img/profile-pic-l.jpg" />
+                  <img alt="Profile" src={`https://api2.funedulearn.com/images/${user_image}`} />
                 </span>
               </DropdownToggle>
               <DropdownMenu className="mt-3" right>
                 <DropdownItem>Account</DropdownItem>
-                <DropdownItem>Features</DropdownItem>
-                <DropdownItem>History</DropdownItem>
-                <DropdownItem>Support</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem onClick={() => this.handleLogout()}>
+                <DropdownItem onClick={this.handleLogout}>
                   Sign out
                 </DropdownItem>
               </DropdownMenu>

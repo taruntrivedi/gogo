@@ -34,14 +34,14 @@ const data = [
     
   },
   {
-    id: "menu",
+    id: "reports",
     icon: "iconsminds-profile",
     label: "Reports",
     to: "/app/menu",
    
   },
   {
-    id: "menu",
+    id: "tests",
     icon: "iconsminds-notepad",
     label: "Tests",
     to: "/app/menu",
@@ -49,22 +49,22 @@ const data = [
   },
 
   {
-    id: "menu",
+    id: "study",
     icon: "iconsminds-open-book",
     label: "Study Materials",
-    to: "/app/menu",
+    to: "/app/studymaterials",
    
   },
 
   {
-    id: "menu",
+    id: "batches",
     icon: "iconsminds-mens",
     label: "Batches",
     to: "/app/menu",
    
   },
   {
-    id: "menu",
+    id: "store",
     icon: "iconsminds-books",
     label: "Store",
     to: "/app/menu",

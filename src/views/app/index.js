@@ -18,16 +18,16 @@ const Menu = React.lazy(() => import(/* webpackChunkName: "menu" */ './menu'));
 const BlankPage = React.lazy(() =>
   import(/* webpackChunkName: "blank-page" */ './blank-page')
 );
-const Actions = React.lazy(() =>
-  import(/* webpackChunkName: "blank-page" */ './actions')
-);
+
 const Attendance = React.lazy(() =>
   import(/* webpackChunkName: "views-error" */ './dashboards/attendance')
 );
 const Announcement = React.lazy(() =>
   import(/* webpackChunkName: "views-error" */ './dashboards/announcments')
 );
-
+const StudyMaterials = React.lazy(() =>
+  import(/* webpackChunkName: "views-error" */ './dashboards/studyMaterial')
+);
 class App extends Component {
   render() {
     const { match } = this.props;
@@ -46,10 +46,7 @@ class App extends Component {
                 path={`${match.url}/dashboards`}
                 render={props => <Dashboards {...props} />}
               />
-              <Route
-                path={`${match.url}/actions`}
-                render={props => <Actions {...props} />}
-              />
+              
               <Route
                 path={`${match.url}/applications`}
                 render={props => <Applications {...props} />}
@@ -77,6 +74,10 @@ class App extends Component {
                <Route
                 path={`${match.url}/announcements`}
                 render={props => <Announcement {...props} />}
+              />
+              <Route
+                path={`${match.url}/studymaterials`}
+                render={props => <StudyMaterials {...props} />}
               />
               <Redirect to="/error" />
             </Switch>
