@@ -71,6 +71,15 @@ export const SURVEY_GET_DETAILS_ERROR = "SURVEY_GET_DETAILS_ERROR";
 export const SURVEY_DELETE_QUESTION = "SURVEY_DELETE_QUESTION";
 export const SURVEY_SAVE = "SURVEY_SAVE";
 
+/*BATCH */
+
+export const BATCH_GET_DETAILS="BATCH_GET_DETAILS";
+export const BATCH_GET_DETAILS_SUCCESS = "BATCH_GET_DETAILS_SUCCESS";
+export const BATCH_GET_DETAILS_ERROR = "BATCH_GET_DETAILS_ERROR";
+export const BATCH_SAVE = "BATCH_SAVE";
+export const GET_TIME ="GET_TIME";
+
+
 export * from "./menu/actions";
 export * from "./settings/actions";
 export * from "./auth/actions";
@@ -78,3 +87,4 @@ export * from "./todo/actions";
 export * from "./chat/actions";
 export * from "./surveyList/actions";
 export * from "./surveyDetail/actions";
+export * from "./batch/actions";

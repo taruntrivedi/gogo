@@ -4,6 +4,7 @@ import todoSagas from './todo/saga';
 import chatSagas from './chat/saga';
 import surveyListSagas from './surveyList/saga';
 import surveyDetailSagas from './surveyDetail/saga';
+import batchSagas from './batch/saga';
 
 export default function* rootSaga(getState) {
   yield all([
@@ -11,6 +12,7 @@ export default function* rootSaga(getState) {
     todoSagas(),
     chatSagas(),
     surveyListSagas(),
-    surveyDetailSagas()
+    surveyDetailSagas(),
+    batchSagas()
   ]);
 }

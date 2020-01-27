@@ -16,6 +16,7 @@ class DateSlider extends Component {
   }
   componentDidUpdate=()=>{
     // this.props.dateHandler(this.state.label);
+    
   }
 
   handleChange = date => {
