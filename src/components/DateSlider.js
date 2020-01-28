@@ -12,11 +12,11 @@ class DateSlider extends Component {
 
   componentDidMount() {
     // this.props.dateHandler(this.state.label);
+    // this.goToCurrent();
 
   }
   componentDidUpdate=()=>{
     // this.props.dateHandler(this.state.label);
-    
   }
 
   handleChange = date => {

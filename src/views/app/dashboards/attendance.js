@@ -1,136 +1,232 @@
-import React, { Component, Fragment } from 'react';
-import { injectIntl } from 'react-intl';
-import { Row } from 'reactstrap';
-import {Link} from 'react-router-dom';
-import { Colxx, Separator } from '../../../components/common/CustomBootstrap';
-import Breadcrumb from '../../../containers/navs/Breadcrumb';
+import React, { Component, Fragment } from "react";
+import { injectIntl } from "react-intl";
+import { Row } from "reactstrap";
+import { Link } from "react-router-dom";
+import {connect} from "react-redux";
+import { Colxx, Separator } from "../../../components/common/CustomBootstrap";
 import {
-  Card, CardImg, CardText, CardBody, CardLink,
-  CardTitle, CardSubtitle, Button, NavLink, Modal,
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardLink,
+  CardTitle,
+  CardSubtitle,
+  Button,
+  NavLink,
+  Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-} from 'reactstrap';
-import Switch from "react-switch";
+  ModalFooter
 
-import DateSlider from '../../../components/DateSlider';
-import './default.css';
+} from "reactstrap";
+import axios from "../../../axios-dashboard";
+import DateSlider from "../../../components/DateSlider";
+import "./default.css";
+import ModalRight from "../../../components/ModalRight";
 
 class Attendance extends Component {
   constructor() {
     super();
-    this.state = { 
+    this.state = {
       checked: false,
-      modalRight: false };
+      date:new Date(),
+      batchData:"",
+      waiting:true,
+      modalRight: false,
+    };
     this.handleChange = this.handleChange.bind(this);
   }
 
+  
 
-
+  getDate=(date)=> {
+    this.setState({date:date})
+    
+  }
   toggleRight = () => {
     this.setState(prevState => ({
       modalRight: !prevState.modalRight
     }));
+    console.log(this.state.modalRight )
   };
+
+  getTime=(date) =>{
+    var day;
+switch (new Date(date).getDay()) {
+  case 0:
+    day = "su";
+    break;
+  case 1:
+    day = "mo";
+    break;
+  case 2:
+    day = "tu";
+    break;
+  case 3:
+    day = "we";
+    break;
+  case 4:
+    day = "th";
+    break;
+  case 5:
+    day = "fr";
+    break;
+  case  6:
+    day = "sa";
+    break;
+  default:
+    day ="not a day";
+}
+
+var item
+for(var i =0; i< this.state.batchData.length;i++){
+  if(this.state.batchData[i].time.hasOwnProperty(day)){
+    item = this.state.batchData[i].time[day];
+    if(item.enable === true){
+      var batchTimeHr=Math.floor(item.time/60);
+      var batchTimeMi=item.time%60;
+      let batchData = JSON.parse(JSON.stringify(this.state.batchData));
+      batchData[i].time_hr=batchTimeHr;
+      batchData[i].time_mi = ":"+ batchTimeMi.toString().slice(0,2);
+      if(batchTimeHr>12){
+        batchTimeHr=batchTimeHr-12;
+        batchData[i].timing = `${batchTimeHr} : ${batchTimeMi} PM`
+      }
+      else if(batchTimeHr<12){
+        batchData[i].timing = `${batchTimeHr} : ${batchTimeMi} AM`
+      }
+      else if(batchTimeHr===12){
+        batchData[i].timing = `${batchTimeHr} : ${batchTimeMi} PM`
+      }
+      else if(batchTimeHr===24){
+        batchData[i].timing = `00 : ${batchTimeMi} AM`
+      }
+      
+      this.setState({
+        batchData:batchData,
+        waiting:false
+      }) 
+    }
+    else{
+      let batchData = JSON.parse(JSON.stringify(this.state.batchData));
+      batchData[i].time_hr="Class Off";
+      batchData[i].time_mi = "";
+      batchData[i].timing = "Class Off";
+      this.setState({
+        batchData:batchData,
+      }) 
+    }
+  }
+}
+
+  }
+
+  getTimetableData=(date)=>{
+    const packet = {
+      date: (this.state.date).toISOString(),
+    };
+    const auth = localStorage.getItem("jwt");
+    axios
+    .post("/batches", packet, { headers: {"Authorization" : `${auth}`} })
+    .then(response => {
+      if (response.data.code !== 200) {
+        console.log(response)
+      } else if (
+        response.data.code === 200 
+      ) {
+       this.setState({batchData: response.data.batches})
+      //  console.log(this.state.batchData)
+      //  console.log(this.props.date)
+      //  console.log(new Date(packet.date).getDay());
+       this.getTime(packet.date);
+      } 
+      console.log(response)
+    })
+    .catch(error => console.log(error)); 
+};
+  
+shouldComponentUpdate(nextProps, nextState) {
+  if (nextState.date !== this.state.date) {
+    return true;
+  }
+  return false; 
+} 
+
+  componentDidMount = () =>{
+    console.log("this is from comoponentDIdMount")
+    this.getTimetableData();
+   
+    
+  }
+  componentDidUpdate=()=>{
+    console.log("this is from comoponentDIdUpdate");
+    
+    this.getTimetableData();
+   
+  }
+
 
   handleChange(checked) {
     this.setState({ checked });
   }
 
   render() {
-    const { messages } = this.props.intl;
+
+    if (this.state.waiting === false) {
+      var DataCards = this.state.batchData.map(batch_data => (
+        <Colxx sm="12" lg="4" key={batch_data._id} className="mb-4">
+          <Card>
+            <CardImg
+              top
+              width="100%"
+              src={`https://api2.funedulearn.com/${batch_data.picture}`}
+              alt="Card image cap"
+            />
+
+            <CardBody>
+              <CardTitle>{batch_data.subject}</CardTitle>
+              <div className="flex_props">
+                <CardSubtitle>{batch_data.teacher_id.name}</CardSubtitle>
+                <span className="card_time">{batch_data.timing}</span>
+              </div>
+              <div className="flex_props">
+                <Link style={{ fontSize: "18px" }}   onClick={this.toggleRight}>
+                  Take Attendance
+                </Link>
+              </div>
+             
+            </CardBody>
+          </Card>
+        </Colxx>
+      ));
+    }
     return (
       <Fragment>
         <Row>
-          <Colxx xxs="12">
-            <Breadcrumb heading="menu.default" match={this.props.match} />
-            <Separator className="mb-5" />
-          </Colxx>
-        </Row>
-    
-        <Row>
-      
           <Colxx xxs="12" className="mb-5">
-           <DateSlider></DateSlider>
+            <DateSlider dateHandler={this.getDate}></DateSlider>
           </Colxx>
         </Row>
         <Row>
-          <Colxx sm="12" lg="4" className="mb-4">
-          <Card>
-        <CardImg top width="100%" src="/assets/img/chocolate-cake-thumb.jpg" alt="Card image cap" />
-        <CardBody>
-          <CardTitle>Chemistry</CardTitle>
-          <div className="flex_props">
-          <CardSubtitle>Ms Shobhita Dhulipala</CardSubtitle><span className="card_time">4:30 PM</span>
-          </div>
-         <div className="flex_props">
-         <Button style={{ fontSize:"18px", textDecoration:"none"}} color="link" onClick={this.toggleRight} >Take Attendance</Button>
-         </div>
-         <Modal
-                    isOpen={this.state.modalRight}
-                    toggle={this.toggleRight}
-                    wrapClassName="modal-right">
-                    <ModalHeader toggle={this.toggleRight}>
-                      Attendance
-                    </ModalHeader>
-                    <ModalBody>
-                    <ul>
-                      <li name="item1">student 1  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item2">student 2  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item3">student 3  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item4">student 4  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item5">student 5  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item6">student 6  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item7">student 7  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item8">student 8  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item9">student 9  <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                      <li name="item10">student 10 <Switch onChange={this.handleChange} checked={this.state.checked} /></li>
-                    </ul>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="primary" onClick={this.toggleRight}>
-                      <i className="iconsminds-save"> Save</i> 
-                      </Button>{" "}
-                      <Button color="secondary" onClick={this.toggleRight}>
-                        Cancel
-                      </Button>
-                    </ModalFooter>
-                  </Modal>
-          
-        </CardBody>
-      </Card>
-          </Colxx>
-          <Colxx md="6" lg="4" className="mb-4">
-          <Card>
-        <CardImg top width="100%" src="/assets/img/chocolate-cake-thumb.jpg" alt="Card image cap" />
-        <CardBody>
-          <CardTitle>Chemistry</CardTitle>
-          <div className="flex_props">
-          <CardSubtitle>Ms Shobhita Dhulipala</CardSubtitle><span className="card_time">4:30 PM</span>
-          </div>
-          <Button style={{ fontSize:"18px", textDecoration:"none"}} color="link" onClick={this.toggleRight} >Take Attendance</Button>
-          
-        </CardBody>
-      </Card>
-          </Colxx>
-          <Colxx md="6" lg="4" className="mb-4">
-          <Card>
-        <CardImg top width="100%" src="/assets/img/chocolate-cake-thumb.jpg" alt="Card image cap" />
-        <CardBody>
-          <CardTitle>Chemistry</CardTitle>
-          <div className="flex_props">
-          <CardSubtitle>Ms Shobhita Dhulipala</CardSubtitle><span className="card_time">4:30 PM</span>
-          </div>
-          <Button style={{ fontSize:"18px", textDecoration:"none"}} color="link" onClick={this.toggleRight} >Take Attendance</Button>
-          
-        </CardBody>
-      </Card>
-          </Colxx>
+          {DataCards}
+          <ModalRight toggleModal ={this.toggleRight} open ={this.state.modalRight}></ModalRight>
         </Row>
-     
-          
       </Fragment>
     );
   }
 }
-export default injectIntl(Attendance);
+
+const mapStateToProps = state => {
+  return {
+      date:state.BatchData.date
+  };
+};
+
+
+const mapDispatchToProps = dispatch => {
+  return {
+      onDateChange:(date) => dispatch({type:"GET_TIME", payload:date})
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Attendance);
